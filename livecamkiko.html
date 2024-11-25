@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Acessar Câmera</title>
+    <style>
+        #video {
+            width: 100%;
+            max-width: 600px;
+            border: 1px solid black;
+            display: none; /* O vídeo só aparece depois que a câmera for ativada */
+        }
+        #start-camera {
+            display: block;
+            margin: 20px auto;
+            padding: 10px 20px;
+            font-size: 18px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        #start-camera:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <button id="start-camera">Acessar Câmera</button>
+    <video id="video" autoplay playsinline></video>
+
+    <script>
+        // Seleciona os elementos
+        const video = document.getElementById('video');
+        const startCameraButton = document.getElementById('start-camera');
+
+        // Função para iniciar a câmera ao clicar no botão
+        startCameraButton.addEventListener('click', () => {
+            if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+                navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user' } })
+                    .then((stream) => {
+                        video.style.display = 'block'; // Mostra o elemento de vídeo
+                        startCameraButton.style.display = 'none'; // Esconde o botão
+                        video.srcObject = stream;
+                    })
+                    .catch((error) => {
+                        console.error('Erro ao acessar a câmera:', error);
+                        alert('Não foi possível acessar a câmera. Verifique as permissões.');
+                    });
+            } else {
+                alert('getUserMedia() não é suportado pelo seu navegador.');
+            }
+        });
+    </script>
+</body>
+</html>
